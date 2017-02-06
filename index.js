@@ -1,3 +1,5 @@
+'use strict';
+
 const co = require('co');
 const SDK = require('./lib/sdk');
 const generateCert = require('./lib/letsencrypt');
