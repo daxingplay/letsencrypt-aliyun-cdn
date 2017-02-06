@@ -1,23 +1,22 @@
 {
-  "name": "ali-cdn-sdk",
-  "version": "1.1.0",
+  "name": "aliyun-cdn-letsencrypt",
+  "version": "1.0.0",
   "description": "阿里云 cdn sdk",
-  "main": "lib/sdk.js",
+  "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ali-sdk/aliyun-cdn-sdk"
+    "url": "https://github.com/"
   },
-  "homepage": "https://github.com/ali-sdk/aliyun-cdn-sdk",
-  "author": "ikobe <ikobe621@gmail.com>",
-  "files": [
-    "lib"
-  ],
+  "homepage": "https://github.com/",
+  "author": "daxingplay <daxingplay@gmail.com>",
   "scripts": {
     "test": "mocha",
     "lint": "eslint lib test"
   },
   "dependencies": {
+    "bluebird": "^3.4.7",
     "crypto": "^0.0.3",
+    "thunkify": "^2.1.2",
     "urllib": "^2.17.1"
   },
   "pre-commit": [
