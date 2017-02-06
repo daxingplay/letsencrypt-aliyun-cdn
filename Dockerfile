@@ -16,6 +16,7 @@ RUN apk update && apk add nodejs && \
     chmod +x /srv/docker/start.sh && \
     cd /srv && \
     npm i && \
+    mkdir /etc/lego && \
     rm -rf /var/cache/apk/*
 
 ENTRYPOINT ["/srv/docker/start.sh"]
