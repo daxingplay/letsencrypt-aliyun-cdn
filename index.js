@@ -3,6 +3,7 @@
 const co = require('co');
 const SDK = require('./lib/sdk');
 const generateCert = require('./lib/letsencrypt');
+const Certificate = require('./lib/certificate');
 const ENV = process.env;
 
 const CONFIG = {
@@ -21,7 +22,7 @@ co(function* () {
   const sdk = new SDK(CONFIG);
   const { ServerCertificate, PrivateKey } = yield generateCert(domains, email, dnsType, certPath);
   const { GetDomainDetailModel: mainDomainInfo } = yield sdk.DescribeCdnDomainDetail({ DomainName: domains[0] });
-  const needUpdateCert = mainDomainInfo.ServerCertificate !== ServerCertificate;
+  const needUpdateCert = !Certificate.isEqual(mainDomainInfo.ServerCertificate, ServerCertificate);
   let CertName = mainDomainInfo.CertificateName;
 
   // check if cert need to update; this action generate new cert name;
@@ -33,6 +34,8 @@ co(function* () {
       ServerCertificateStatus: 'on',
       CertName, ServerCertificate, PrivateKey,
     });
+  } else {
+    console.log(`no need to update certicate. cert is equal? ${needUpdateCert}`);
   }
 
   // check each other domain whether it has used new cert, otherwise, set this domain to use cert which main domain uses.
