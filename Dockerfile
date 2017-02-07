@@ -15,7 +15,7 @@ RUN apk update && apk add bash nodejs && \
     chmod -R +x /etc/periodic/ && \
     chmod +x /srv/docker/start.sh && \
     cd /srv && \
-    npm i && \
+    npm i --production && \
     mkdir /etc/lego && \
     rm -rf /var/cache/apk/*
 
