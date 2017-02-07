@@ -14,4 +14,8 @@ describe('Certificate Test', function() {
     expect(certificate.isEqual(crt1, crt2)).to.be.true;
   });
 
+  it('should return false when one cert is undefined.', function() {
+    expect(certificate.isEqual()).to.not.be.true;
+  });
+
 });
