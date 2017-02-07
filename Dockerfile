@@ -11,7 +11,7 @@ ENV API_VERSION 2014-11-11
 ADD . /srv/
 COPY docker/tasks/ /etc/periodic/
 
-RUN apk update && apk add nodejs && \
+RUN apk update && apk add bash nodejs && \
     chmod -R +x /etc/periodic/ && \
     chmod +x /srv/docker/start.sh && \
     cd /srv && \
