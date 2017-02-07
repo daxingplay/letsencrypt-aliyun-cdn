@@ -2,4 +2,4 @@
 
 /usr/bin/node /srv/index.js
 
-crond -l 2 -f $1
+crond -l 6 -f $1
