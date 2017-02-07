@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "bluebird": "^3.4.7",
+    "co": "^4.6.0",
     "crypto": "^0.0.3",
     "urllib": "^2.17.1",
     "x509": "^0.3.1"
@@ -24,7 +25,6 @@
   ],
   "devDependencies": {
     "chai": "^3.5.0",
-    "co": "^4.6.0",
     "eslint": "2",
     "eslint-config-egg": "^2.0.0",
     "lint": "^1.1.2",
