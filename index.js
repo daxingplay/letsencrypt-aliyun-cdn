@@ -12,20 +12,42 @@ const CONFIG = {
   apiVersion: ENV.API_VERSION || '2014-11-11',
 };
 
-const domain = ENV.DOMAINS;
+const domains = (ENV.DOMAINS || '').split(',');
 const email = ENV.EMAIL;
 const dnsType = ENV.DNS_TYPE;
 const certPath = '/etc/lego';
 
 co(function* () {
   const sdk = new SDK(CONFIG);
-  const certs = yield generateCert(domain, email, dnsType, certPath);
-  for (let i = 0; i < certs.length; i++ ) {
-    const cert = certs[i];
-    console.log(`updaing ${cert.DomainName} ${cert.CertName}`);
-    const res = yield sdk.SetDomainServerCertificate(Object.assign(cert, {
+  const { ServerCertificate, PrivateKey } = yield generateCert(domains, email, dnsType, certPath);
+  const { GetDomainDetailModel: mainDomainInfo } = yield sdk.DescribeCdnDomainDetail({ DomainName: domains[0] });
+  const needUpdateCert = mainDomainInfo.ServerCertificate !== certs.ServerCertificate;
+  let CertName = mainDomainInfo.CertificateName;
+
+  // check if cert need to update; this action generate new cert name;
+  if (mainDomainInfo.ServerCertificateStatus === 'off' || needUpdateCert) {
+    CertName = `${domains[0]}-${Date.now()}`;
+    console.log('updating cert, generate cert name: ${CertName}');
+    const setMainDomainCertResult = yield sdk.SetDomainServerCertificate({
+      DomainName: domains[0],
       ServerCertificateStatus: 'on',
-    }));
-    console.log(res);
+      CertName, ServerCertificate, PrivateKey,
+    });
+  }
+
+  // check each other domain whether it has used new cert, otherwise, set this domain to use cert which main domain uses.
+  for (let i = 1; i < domains.length; i++ ) {
+    const domain = domains[i];
+    const { GetDomainDetailModel: domainInfo } = yield sdk.DescribeCdnDomainDetail({ DomainName: domain });
+    if (domainInfo.CertificateName !== CertName) {
+      console.log(`updaing ${domain} to use cert: ${CertName}`);
+      yield sdk.SetDomainServerCertificate({
+        DomainName: domain,
+        CertName, 
+        ServerCertificateStatus: 'on',
+      });
+    } else {
+      console.log(`${domain} has already used ${CertName}, skip.`);
+    }
   }
 });
