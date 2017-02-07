@@ -27,7 +27,7 @@ co(function* () {
   // check if cert need to update; this action generate new cert name;
   if (mainDomainInfo.ServerCertificateStatus === 'off' || needUpdateCert) {
     CertName = `${domains[0]}-${Date.now()}`;
-    console.log('updating cert, generate cert name: ${CertName}');
+    console.log(`updating cert, generate cert name: ${CertName}`);
     const setMainDomainCertResult = yield sdk.SetDomainServerCertificate({
       DomainName: domains[0],
       ServerCertificateStatus: 'on',
