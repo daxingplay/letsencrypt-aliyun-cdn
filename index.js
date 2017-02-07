@@ -21,7 +21,7 @@ co(function* () {
   const sdk = new SDK(CONFIG);
   const { ServerCertificate, PrivateKey } = yield generateCert(domains, email, dnsType, certPath);
   const { GetDomainDetailModel: mainDomainInfo } = yield sdk.DescribeCdnDomainDetail({ DomainName: domains[0] });
-  const needUpdateCert = mainDomainInfo.ServerCertificate !== certs.ServerCertificate;
+  const needUpdateCert = mainDomainInfo.ServerCertificate !== ServerCertificate;
   let CertName = mainDomainInfo.CertificateName;
 
   // check if cert need to update; this action generate new cert name;
