@@ -22,11 +22,11 @@ co(function* () {
   const sdk = new SDK(CONFIG);
   const { ServerCertificate, PrivateKey } = yield generateCert(domains, email, dnsType, certPath);
   const { GetDomainDetailModel: mainDomainInfo } = yield sdk.DescribeCdnDomainDetail({ DomainName: domains[0] });
-  const needUpdateCert = !Certificate.isEqual(mainDomainInfo.ServerCertificate, ServerCertificate.toString());
+  const certIsEqual = Certificate.isEqual(mainDomainInfo.ServerCertificate, ServerCertificate.toString());
   let CertName = mainDomainInfo.CertificateName;
 
   // check if cert need to update; this action generate new cert name;
-  if (mainDomainInfo.ServerCertificateStatus === 'off' || needUpdateCert) {
+  if (mainDomainInfo.ServerCertificateStatus === 'off' || !certIsEqual) {
     CertName = `${domains[0]}-${Date.now()}`;
     console.log(`updating cert, generate cert name: ${CertName}`);
     yield sdk.SetDomainServerCertificate({
@@ -35,7 +35,7 @@ co(function* () {
       CertName, ServerCertificate, PrivateKey,
     });
   } else {
-    console.log(`no need to update certicate. cert is equal? ${needUpdateCert}`);
+    console.log(`no need to update certicate. cert is equal? ${certIsEqual}`);
   }
 
   // check each other domain whether it has used new cert, otherwise, set this domain to use cert which main domain uses.
