@@ -16,7 +16,6 @@
   "dependencies": {
     "bluebird": "^3.4.7",
     "crypto": "^0.0.3",
-    "thunkify": "^2.1.2",
     "urllib": "^2.17.1",
     "x509": "^0.3.1"
   },
