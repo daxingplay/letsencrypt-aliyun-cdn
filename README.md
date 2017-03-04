@@ -32,6 +32,8 @@ $ docker start -e ACCESS_KEY_ID='阿里云的 ACCESS KEY' \
 * 根据 DNS 服务商的不同，需要配置额外的环境变量：
   * dnspod：
     * `DNSPOD_API_KEY`：格式为 `id` + 英文逗号 + `token`，比如 `1235,abcdefghigj`
+  * digitalocean:
+    * `DO_AUTH_TOKEN`：DO 申请的 API TOKEN  
 
 ## 链接
 
