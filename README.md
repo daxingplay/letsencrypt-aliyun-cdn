@@ -4,7 +4,7 @@
 
 [中文文档](README.zh.md)
 
-automatically apply and nenew certificates for domains hosted on aliyun cdn. It is based on [xenolf/lego](https://github.com/xenolf/lego) and [ali-sdk/aliyun-cdn-sdk](https://github.com/ali-sdk/aliyun-cdn-sdk), thanks for their great works!
+Automatically apply and renew certificates for domains hosted on aliyun cdn. It is based on [xenolf/lego](https://github.com/xenolf/lego) and [ali-sdk/aliyun-cdn-sdk](https://github.com/ali-sdk/aliyun-cdn-sdk), thanks for their great works!
 
 ## Features
 
