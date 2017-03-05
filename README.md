@@ -2,21 +2,23 @@
 
 [![Docker Automated buil](https://img.shields.io/docker/automated/daxingplay/letsencrypt-aliyun-cdn.svg)](https://hub.docker.com/r/daxingplay/letsencrypt-aliyun-cdn/) [![Docker Stars](https://img.shields.io/docker/stars/daxingplay/letsencrypt-aliyun-cdn.svg)](https://hub.docker.com/r/daxingplay/letsencrypt-aliyun-cdn/) [![Docker Pulls](https://img.shields.io/docker/pulls/daxingplay/letsencrypt-aliyun-cdn.svg)](https://hub.docker.com/r/daxingplay/letsencrypt-aliyun-cdn/) [![](https://badge.imagelayers.io/daxingplay/letsencrypt-aliyun-cdn:latest.svg)](https://imagelayers.io/?images=daxingplay/letsencrypt-aliyun-cdn:latest 'Get your own badge on imagelayers.io')
 
-自动为您在阿里云CDN上的域名申请 letsencrypt 的免费证书，并自动帮您完成配置
+[中文文档](README.zh.md)
 
-## 特点
+automatically apply and nenew certificates for domains hosted on aliyun cdn. It is based on [xenolf/lego](https://github.com/xenolf/lego) and [ali-sdk/aliyun-cdn-sdk](https://github.com/ali-sdk/aliyun-cdn-sdk), thanks for their great works!
 
-* 只支持 letsencrypt 证书申请
-* 自动申请、如果已经申请了，自动再过期前10天进行续约
-* 支持 dnspod、Route 53、vultr、digitalocean 等 DNS 服务商，列表详见：[DNS Providers](https://github.com/xenolf/lego/tree/master/providers/dns)
+## Features
 
-## 使用方法
+* Letsencrypt certificates only. It is free!
+* Apply for certs automatically. Auto renew certs 10 days before it is expired.
+* Support a lot of DNS providers such as dnspod、Route 53、vultr、digitalocean. [DNS Providers Full List](https://github.com/xenolf/lego/tree/master/providers/dns)
+
+## Usage
 
 ```bash
 
 $ docker pull daxingplay/letsencrypt-aliyun-cdn
-$ docker start -e ACCESS_KEY_ID='阿里云的 ACCESS KEY' \
-  -e ACCESS_SECRET='阿里云的 ACCESS SECRET' \
+$ docker start -e ACCESS_KEY_ID='ACCESS KEY for your aliyun account' \
+  -e ACCESS_SECRET='ACCESS SECRET for your aliyun account' \
   -e DOMAINS='example.com,cdn1.example.com,cdn2.example.com' \
   -e EMAIL='admin@example.com' \
   -e DNS_TYPE='dnspod' \
@@ -25,18 +27,18 @@ $ docker start -e ACCESS_KEY_ID='阿里云的 ACCESS KEY' \
 
 ```
 
-## 环境变量说明
+## Environment Viarables
 
-* `ACCESS_KEY_ID`：阿里云的 ACCESS KEY，建议使用最小权限
-* `ACCESS_SECRET`：阿里云的 ACCESS SECRET，建议使用最小权限
-* `DOMAINS`：需要申请证书的域名列表，这些域名也必须是正在使用阿里云CDN服务的，多个域名列表以英文逗号分隔，这些域名必须使用同一个 DNS 服务商
-* `DNS_TYPE`：上述域名所使用的 DNS 服务商
-* 根据 DNS 服务商的不同，需要配置额外的环境变量：
-  * dnspod：
-    * `DNSPOD_API_KEY`：格式为 `id` + 英文逗号 + `token`，比如 `1235,abcdefghigj`
+* `ACCESS_KEY_ID`: ACCESS KEY for aliyun account, we suggest you to use ram account for minimum privileges.
+* `ACCESS_SECRET`: ACCESS SECRET for aliyun account.
+* `DOMAINS`: The domains need to apply for free certs. These domains must be using aliyun CDN services already. Multiple domains should be separeted by comma, and they must use the same DNS provider.
+* `DNS_TYPE`: The DNS provider used by the domains above.
+* According to the DNS provider you use, you need to set different environment viarables for proper API token:
+  * dnspod:
+    * `DNSPOD_API_KEY`: The format is `id,token`, eg: `1235,abcdefghigj`
   * digitalocean:
-    * `DO_AUTH_TOKEN`：DO 申请的 API TOKEN  
+    * `DO_AUTH_TOKEN`：The API token you applied at DO admin console.  
 
-## 链接
+## Links
 
-- [CDN 接口文档](https://help.aliyun.com/document_detail/27148.html?spm=5176.doc27148.6.603.5Tehoi)
+- [CDN API docs](https://help.aliyun.com/document_detail/27148.html?spm=5176.doc27148.6.603.5Tehoi)
