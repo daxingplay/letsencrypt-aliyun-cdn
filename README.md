@@ -1,5 +1,7 @@
 # letsencrypt-aliyun-cdn
 
+[![Docker Automated buil](https://img.shields.io/docker/automated/daxingplay/letsencrypt-aliyun-cdn.svg)](https://hub.docker.com/r/daxingplay/letsencrypt-aliyun-cdn/) [![Docker Stars](https://img.shields.io/docker/stars/daxingplay/letsencrypt-aliyun-cdn.svg)](https://hub.docker.com/r/daxingplay/letsencrypt-aliyun-cdn/) [![Docker Pulls](https://img.shields.io/docker/pulls/daxingplay/letsencrypt-aliyun-cdn.svg)](https://hub.docker.com/r/daxingplay/letsencrypt-aliyun-cdn/) [![ImageLayers Size](https://img.shields.io/imagelayers/image-size/daxingplay/letsencrypt-aliyun-cdn/latest.svg)](https://hub.docker.com/r/daxingplay/letsencrypt-aliyun-cdn/) [![ImageLayers Layers](https://img.shields.io/imagelayers/layers/daxingplay/letsencrypt-aliyun-cdn/latest.svg)](https://hub.docker.com/r/daxingplay/letsencrypt-aliyun-cdn/)
+
 自动为您在阿里云CDN上的域名申请 letsencrypt 的免费证书，并自动帮您完成配置
 
 ## 特点
