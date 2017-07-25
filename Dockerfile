@@ -12,7 +12,7 @@ ENV API_VERSION 2014-11-11
 ADD . /srv/
 COPY docker/tasks/ /etc/periodic/
 
-RUN apk update && apk add ca-certificates go git musl-dev bash nodejs make gcc g++ python && \
+RUN apk update && apk add ca-certificates go git musl-dev bash nodejs nodejs-npm make gcc g++ python && \
     go get -u github.com/xenolf/lego && \
     cd /go/src/github.com/xenolf/lego && \
     go build -o /usr/bin/lego . && \
@@ -21,7 +21,7 @@ RUN apk update && apk add ca-certificates go git musl-dev bash nodejs make gcc g
     cd /srv && \
     npm i --production && \
     mkdir /etc/lego && \
-    apk del go git musl-dev make gcc g++ python && \
+    apk del go git musl-dev make gcc g++ python nodejs-npm && \
     rm -rf /var/cache/apk/* && \
     rm -rf /go
 
