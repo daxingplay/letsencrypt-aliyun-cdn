@@ -13,7 +13,6 @@ ADD . /srv/
 COPY docker/tasks/ /etc/periodic/
 
 RUN apk update && apk add ca-certificates go git musl-dev bash nodejs make gcc g++ python && \
-    rm -rf /var/cache/apk/* && \
     go get -u github.com/xenolf/lego && \
     cd /go/src/github.com/xenolf/lego && \
     go build -o /usr/bin/lego . && \
