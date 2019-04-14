@@ -15,7 +15,7 @@
 ```bash
 
 $ docker pull daxingplay/letsencrypt-aliyun-cdn
-$ docker start -e ACCESS_KEY_ID='阿里云的 ACCESS KEY' \
+$ docker run -e ACCESS_KEY_ID='阿里云的 ACCESS KEY' \
   -e ACCESS_SECRET='阿里云的 ACCESS SECRET' \
   -e DOMAINS='example.com,cdn1.example.com,cdn2.example.com' \
   -e EMAIL='admin@example.com' \
