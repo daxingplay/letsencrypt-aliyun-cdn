@@ -17,7 +17,7 @@ Automatically apply and renew certificates for domains hosted on aliyun cdn. It 
 ```bash
 
 $ docker pull daxingplay/letsencrypt-aliyun-cdn
-$ docker start -e ACCESS_KEY_ID='ACCESS KEY for your aliyun account' \
+$ docker run -e ACCESS_KEY_ID='ACCESS KEY for your aliyun account' \
   -e ACCESS_SECRET='ACCESS SECRET for your aliyun account' \
   -e DOMAINS='example.com,cdn1.example.com,cdn2.example.com' \
   -e EMAIL='admin@example.com' \
