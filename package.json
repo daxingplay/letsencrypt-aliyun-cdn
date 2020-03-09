@@ -25,7 +25,7 @@
   ],
   "devDependencies": {
     "chai": "^3.5.0",
-    "eslint": "2",
+    "eslint": "^4.18.2",
     "eslint-config-egg": "^2.0.0",
     "lint": "^1.1.2",
     "mocha": "^3.2.0",
