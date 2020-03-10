@@ -1,4 +1,4 @@
-FROM alpine:3.6
+FROM alpine:3.10
 
 ENV GOPATH /go
 ENV DOMAINS example.com
