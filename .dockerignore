@@ -19,3 +19,5 @@ test/
 .gitignore
 .eslintrc
 README.md
+lego
+certificates

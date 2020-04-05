@@ -1,56 +1,87 @@
-'use strict';
+const { getDomainRoot } = require('./lib/utils');
+const { generateCert, check } = require('./lib/letsencrypt');
+const {
+  describeDomainCertificateInfo,
+  uploadDomainServerCertificate,
+  setDomainServerCertificate,
+} = require('./lib/cdn');
+const { domains, beforeDays, useWildcardCert } = require('./lib/config');
 
-const co = require('co');
-const SDK = require('./lib/sdk');
-const generateCert = require('./lib/letsencrypt');
-const Certificate = require('./lib/certificate');
-const ENV = process.env;
+async function main() {
+  const domainsNeedToBeRenewed = {};
+  const currentTime = new Date().getTime();
+  const expireThreshold = currentTime + beforeDays * 24 * 60 * 60 * 1000;
+  let i = 0;
+  // get info one by one to avoid request throttle.
+  for (let i = 0; i < domains.length; i++) {
+    const currentDomainName = domains[i];
+    let renewInfo;
+    try {
+      const { CertInfos: { CertInfo } } = await describeDomainCertificateInfo(currentDomainName);
+      const currentCert = CertInfo.find(o => o.ServerCertificateStatus === 'on');
+      if (currentCert) {
+        const expireTime = new Date(currentCert.CertExpireTime).getTime();
+        if (expireTime <= expireThreshold) {
+          renewInfo = currentCert;
+        }
+      } else {
+        renewInfo = {
+          DomainName: currentDomainName,
+        };
+      }
+    } catch(e) {
+      console.error(e);
+    }
 
-const CONFIG = {
-  accessKeyId: ENV.ACCESS_KEY_ID,
-  appSecret: ENV.ACCESS_SECRET,
-  endpoint: ENV.ENDPOINT || 'https://cdn.aliyuncs.com',
-  apiVersion: ENV.API_VERSION || '2014-11-11',
-};
-
-const domains = (ENV.DOMAINS || '').split(',');
-const email = ENV.EMAIL;
-const dnsType = ENV.DNS_TYPE;
-const certPath = '/etc/lego';
-
-co(function* () {
-  const sdk = new SDK(CONFIG);
-  const { ServerCertificate, PrivateKey } = yield generateCert(domains, email, dnsType, certPath);
-  const { GetDomainDetailModel: mainDomainInfo } = yield sdk.DescribeCdnDomainDetail({ DomainName: domains[0] });
-  const certIsEqual = Certificate.isEqual(mainDomainInfo.ServerCertificate, ServerCertificate.toString());
-  let CertName = mainDomainInfo.CertificateName;
-
-  // check if cert need to update; this action generate new cert name;
-  if (mainDomainInfo.ServerCertificateStatus === 'off' || !certIsEqual) {
-    CertName = `${domains[0]}-${Date.now()}`;
-    console.log(`updating cert, generate cert name: ${CertName}`);
-    yield sdk.SetDomainServerCertificate({
-      DomainName: domains[0],
-      ServerCertificateStatus: 'on',
-      CertName, ServerCertificate, PrivateKey,
-    });
-  } else {
-    console.log(`no need to update certicate. cert is equal? ${certIsEqual}`);
-  }
-
-  // check each other domain whether it has used new cert, otherwise, set this domain to use cert which main domain uses.
-  for (let i = 1; i < domains.length; i++) {
-    const domain = domains[i];
-    const { GetDomainDetailModel: domainInfo } = yield sdk.DescribeCdnDomainDetail({ DomainName: domain });
-    if (domainInfo.CertificateName !== CertName) {
-      console.log(`updaing ${domain} to use cert: ${CertName}`);
-      yield sdk.SetDomainServerCertificate({
-        DomainName: domain,
-        CertName,
-        ServerCertificateStatus: 'on',
-      });
-    } else {
-      console.log(`${domain} has already used ${CertName}, skip.`);
+    if (renewInfo) {
+      const mainDomain = getDomainRoot(currentDomainName);
+      domainsNeedToBeRenewed[mainDomain] = domainsNeedToBeRenewed[mainDomain] || [];
+      domainsNeedToBeRenewed[mainDomain].push(renewInfo);
     }
   }
-});
+
+  // check if there's any domain needs to be renewed.
+  const domainGroupsNeedToBeRenewed = Object.keys(domainsNeedToBeRenewed);
+  if (domainGroupsNeedToBeRenewed.length === 0) {
+    console.log(`No need to renew domain.`);
+    return;
+  }
+
+  // group domains by its root.
+  const groupForAllDomains = {};
+  domains.forEach((domainName) => {
+    const mainDomain = getDomainRoot(domainName);
+    groupForAllDomains[mainDomain] = groupForAllDomains[mainDomain] || {
+      status: 'unknown',
+      domains: [],
+    };
+    groupForAllDomains[mainDomain].domains.push(domainName);
+  });
+
+  // renew domains by group
+  for (let i = 0; i < domainGroupsNeedToBeRenewed.length; i++) {
+    const domainRoot = domainGroupsNeedToBeRenewed[i];
+    const allDomainsInThisGroup = groupForAllDomains[domainRoot].domains;
+    const { ServerCertificate, PrivateKey } = await generateCert(
+      useWildcardCert ? [`*.${domainRoot}`] : allDomainsInThisGroup,
+    );
+    const domainsInThisRenewGroup = domainsNeedToBeRenewed[domainRoot];
+    const firstDomainInRenewGroup = domainsInThisRenewGroup[0];
+    const { CertName } = await uploadDomainServerCertificate(
+      firstDomainInRenewGroup.DomainName,
+      ServerCertificate,
+      PrivateKey,
+    );
+    for (let j = 1; j < domainsInThisRenewGroup.length; j++) {
+      const currentDomainName = domainsInThisRenewGroup[j];
+      await setDomainServerCertificate(currentDomainName, CertName);
+    }
+  }
+}
+
+check()
+  .then(main)
+  .then(() => {
+    console.log('Congratulations. All done.');
+    process.exit(0);
+  });

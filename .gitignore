@@ -15,3 +15,5 @@ run/
 test/tmp/
 .tmp/
 .vscode/
+lego
+certificates

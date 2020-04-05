@@ -14,19 +14,16 @@
     "lint": "eslint lib test"
   },
   "dependencies": {
-    "bluebird": "^3.4.7",
-    "co": "^4.6.0",
-    "urllib": "^2.17.1",
-    "x509": "^0.3.1"
+    "@alicloud/pop-core": "^1.7.9",
+    "fecha": "^4.2.0"
   },
   "pre-commit": [
     "lint"
   ],
   "devDependencies": {
     "chai": "^3.5.0",
-    "eslint": "^4.18.2",
-    "eslint-config-egg": "^2.0.0",
-    "lint": "^1.1.2",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.1.0",
     "mocha": "^3.2.0",
     "moment": "^2.17.1"
   }
