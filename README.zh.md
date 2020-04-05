@@ -25,6 +25,25 @@ $ docker run -e ACCESS_KEY_ID='阿里云的 ACCESS KEY' \
 
 ```
 
+对应 AccessKey 和 AccessSecret 需要有以下权限：
+
+```json
+{
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "cdn:DescribeCdnCertificateDetail",
+                "cdn:SetDomainServerCertificate",
+                "cdn:DescribeDomainCertificateInfo"
+            ],
+            "Resource": "*"
+        }
+    ],
+    "Version": "1"
+}
+```
+
 ## 环境变量说明
 
 * `ACCESS_KEY_ID`：阿里云的 ACCESS KEY，建议使用最小权限

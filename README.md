@@ -27,6 +27,25 @@ $ docker run -e ACCESS_KEY_ID='ACCESS KEY for your aliyun account' \
 
 ```
 
+RAM policy needed for this operation:
+
+```json
+{
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "cdn:DescribeCdnCertificateDetail",
+                "cdn:SetDomainServerCertificate",
+                "cdn:DescribeDomainCertificateInfo"
+            ],
+            "Resource": "*"
+        }
+    ],
+    "Version": "1"
+}
+```
+
 ## Environment Viarables
 
 * `ACCESS_KEY_ID`: ACCESS KEY for aliyun account, we suggest you to use ram account for minimum privileges.
