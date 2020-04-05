@@ -74,7 +74,7 @@ async function main() {
     );
     for (let j = 1; j < domainsInThisRenewGroup.length; j++) {
       const currentDomainName = domainsInThisRenewGroup[j];
-      await setDomainServerCertificate(currentDomainName, CertName);
+      await setDomainServerCertificate(currentDomainName.DomainName, CertName);
     }
   }
 }
