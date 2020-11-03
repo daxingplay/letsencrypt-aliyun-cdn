@@ -58,6 +58,14 @@ RAM policy needed for this operation:
   * digitalocean:
     * `DO_AUTH_TOKEN`：The API token you applied at DO admin console.  
 
+## FAQ
+
+### Request Certificate failed using dnspod
+
+There's an error in log like this: Post "https://dnsapi.cn/Domain.List": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+
+If you encounter this error, please specify `DNSPOD_HTTP_TIMEOUT` environment variable in your docker env list. Use a value larger than 15 will solve this problem.
+
 ## Links
 
 - [CDN API docs](https://help.aliyun.com/document_detail/27148.html?spm=5176.doc27148.6.603.5Tehoi)

@@ -56,6 +56,14 @@ $ docker run -e ACCESS_KEY_ID='阿里云的 ACCESS KEY' \
   * digitalocean:
     * `DO_AUTH_TOKEN`：DO 申请的 API TOKEN  
 
+## FAQ
+
+### 使用 dnspod 的时候无法生成证书
+
+在错误日志里可以看到类似这种错误：Post "https://dnsapi.cn/Domain.List": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+
+一般是因为请求 dnspod API 超时导致的，可以尝试设置环境变量 `DNSPOD_HTTP_TIMEOUT` 为一个较大的值（比如 15、20 等）来规避这个问题。
+
 ## 链接
 
 - [CDN 接口文档](https://help.aliyun.com/document_detail/27148.html?spm=5176.doc27148.6.603.5Tehoi)
