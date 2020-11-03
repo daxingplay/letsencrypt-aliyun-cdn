@@ -19,7 +19,7 @@ ENV DNS_TYPE  dnspod
 ENV ACCESS_KEY_ID foo
 ENV ACCESS_SECRET bar
 ENV ENDPOINT https://cdn.aliyuncs.com
-ENV API_VERSION 2014-11-11
+ENV API_VERSION 2018-05-10
 
 COPY docker/tasks/ /etc/periodic/
 COPY --from=0 /srv /srv
