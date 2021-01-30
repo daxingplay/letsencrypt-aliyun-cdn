@@ -3,7 +3,7 @@ FROM node:alpine
 ADD . /srv/
 
 RUN apk update && apk add ca-certificates wget && \
-    wget https://github.com/go-acme/lego/releases/download/v3.5.0/lego_v3.5.0_linux_amd64.tar.gz -O /tmp/lego.tar.gz -q && \
+    wget https://github.com/go-acme/lego/releases/download/v4.2.0/lego_v4.2.0_linux_amd64.tar.gz -O /tmp/lego.tar.gz -q && \
     mkdir /tmp/lego && \
     tar zvxf /tmp/lego.tar.gz -C /tmp/lego/ && \
     cp /tmp/lego/lego /srv/lego && \
