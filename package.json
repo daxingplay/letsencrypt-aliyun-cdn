@@ -14,7 +14,7 @@
     "lint": "eslint lib test"
   },
   "dependencies": {
-    "@alicloud/pop-core": "^1.7.9",
+    "@alicloud/pop-core": "^1.7.12",
     "fecha": "^4.2.0"
   },
   "pre-commit": [
